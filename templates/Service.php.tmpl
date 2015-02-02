@@ -11,7 +11,17 @@ use SEOshop\BusinessLogic\Core\Concept\ServiceAbstract;
  * @property LoggerInterface               $logger
  * @property <MODELCLASS>RepositoryInterface $repository The repository handled by this service
  *
- * @package Repository
+ * @method <MODELCLASS> getModel()
+ * @method <MODELCLASS>Collection|<MODELCLASS>[] find()
+ * @method <MODELCLASS> findOne()
+ * @method <MODELCLASS> findOneById($id)
+ * @method <MODELCLASS> create(StrongParameters $attributes)
+ * @method <MODELCLASS> update(<MODELCLASS> $model, StrongParameters $attributes)
+ * @method <MODELCLASS> updateById($id, StrongParameters $attributes)
+ * @method <MODELCLASS> delete(<MODELCLASS> $model)
+ * @method <MODELCLASS> deleteById($id)
+ *
+ * @package <COMPONENT>
  */
 class <MODELCLASS>Service extends ServiceAbstract
 {

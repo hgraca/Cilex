@@ -15,11 +15,11 @@ use Symfony\Component\Console\Question\Question;
  */
 class CodeGenCommand extends Command
 {
-    const TEMPLATE_PATH_SERVICE_MANAGER      = "/ServiceManager.php";
-    const TEMPLATE_PATH_EXCEPTION            = "/ComponentException.php";
-    const TEMPLATE_PATH_SERVICE              = "/Service.php";
-    const TEMPLATE_PATH_REPOSITORY           = "/Repository.php";
-    const TEMPLATE_PATH_REPOSITORY_INTERFACE = "/RepositoryInterface.php";
+    const TEMPLATE_PATH_SERVICE_MANAGER      = "/ServiceManager.php.tmpl";
+    const TEMPLATE_PATH_EXCEPTION            = "/ComponentException.php.tmpl";
+    const TEMPLATE_PATH_SERVICE              = "/Service.php.tmpl";
+    const TEMPLATE_PATH_REPOSITORY           = "/Repository.php.tmpl";
+    const TEMPLATE_PATH_REPOSITORY_INTERFACE = "/RepositoryInterface.php.tmpl";
 
     const REPLACEMENT_STRING_MODEL_CLASS_NAME           = '<MODELCLASS>';
     const REPLACEMENT_STRING_MODEL_VAR_NAME             = '<MODELCLASSVAR>';
@@ -216,24 +216,27 @@ class CodeGenCommand extends Command
     private function addServiceToManager($componentName, $modelClassName)
     {
         $serviceManagerFilePath = $this->getServiceManagerPath($componentName);
+        $template = file_get_contents($serviceManagerFilePath);
 
-        // @todo add the use for the new service
+        // add the use for the new service
+        $find     = file_get_contents($this->getTemplatesPath() . "/ServiceManager_use_from.php.tmpl");
+        $replace  = file_get_contents($this->getTemplatesPath() . "/ServiceManager_use_to.php.tmpl");
+        $template = str_replace($find, $replace, $template);
 
         // add a property
-        $template = file_get_contents($serviceManagerFilePath);
         $find     = '{';
-        $replace  = file_get_contents($this->getTemplatesPath() . "/ServiceManager_property_to.php");
+        $replace  = file_get_contents($this->getTemplatesPath() . "/ServiceManager_property_to.php.tmpl");
         $pos      = strpos($template, $find);
         $template = substr_replace($template, $replace, $pos, 1); // add comma in last parameter
 
         // add a parameter to the docblock
-        $find     = file_get_contents($this->getTemplatesPath() . "/ServiceManager_constr_inj_doc_from.php");
-        $replace  = file_get_contents($this->getTemplatesPath() . "/ServiceManager_constr_inj_doc_to.php");
+        $find     = file_get_contents($this->getTemplatesPath() . "/ServiceManager_constr_inj_doc_from.php.tmpl");
+        $replace  = file_get_contents($this->getTemplatesPath() . "/ServiceManager_constr_inj_doc_to.php.tmpl");
         $template = str_replace($find, $replace, $template);
 
         // add constructor initialization
         $find     = '    ) {';
-        $replace  = file_get_contents($this->getTemplatesPath() . "/ServiceManager_constr_inj.php");
+        $replace  = file_get_contents($this->getTemplatesPath() . "/ServiceManager_constr_inj.php.tmpl");
         $pos      = strpos($template, $find);
         $template = substr_replace($template, ',', $pos - 1, 0); // add comma in last parameter
         $template = str_replace("__construct(,", "__construct(", $template);// remove comma from constructor line
@@ -247,7 +250,7 @@ class CodeGenCommand extends Command
 
         // add getter
         $find     = '}';
-        $replace  = file_get_contents($this->getTemplatesPath() . "/ServiceManager_getter.php");
+        $replace  = file_get_contents($this->getTemplatesPath() . "/ServiceManager_getter.php.tmpl");
         $template = $this->str_lreplace($find, $replace, $template);
 
         // replace stubs
