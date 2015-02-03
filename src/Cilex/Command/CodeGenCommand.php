@@ -174,7 +174,7 @@ class CodeGenCommand extends Command
         }
 
         $componentServicesPath = $this->getComponentServicesPath($componentName);
-        $serviceFilePath       = "{$componentServicesPath}/{$modelClassName}Service.php"; // @todo move this to a method
+        $serviceFilePath = $this->getServiceFilePath($componentName, $modelClassName);
         if ((false === $overwrite) && file_exists($serviceFilePath))
         {
             $output->writeln(
@@ -482,5 +482,19 @@ class CodeGenCommand extends Command
         $bound = $questionHelper->ask($input, $output, $question);
 
         return $bound;
+    }
+
+    /**
+     * @param $componentName
+     * @param $modelClassName
+     *
+     * @return string
+     */
+    private function getServiceFilePath($componentName, $modelClassName)
+    {
+        $componentServicesPath = $this->getComponentServicesPath($componentName);
+        $serviceFilePath = "{$componentServicesPath}/{$modelClassName}Service.php";
+
+        return $serviceFilePath;
     }
 }
