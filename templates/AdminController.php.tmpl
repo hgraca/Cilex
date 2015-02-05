@@ -1,0 +1,145 @@
+<?php
+use SEOshop\Backend\Http\Response;
+use SEOshop\Backend\Routing\StrongParametersInterface;
+use SEOshop\BusinessLogic\<COMPONENT>\<COMPONENT>ServiceManager;
+
+class <URI_CAMEL_CASE>sAdminController extends AdminController
+{
+    const MODEL = '<MODELCLASS>';
+    const URI   = '<URI>';
+
+    /**
+     * @var <COMPONENT>ServiceManager $<COMPONENT_VAR>ServiceManager
+     */
+    protected $<COMPONENT_VAR>ServiceManager;
+
+    /**
+     * @param <COMPONENT>ServiceManager $<COMPONENT_VAR>ServiceManager
+     */
+    public function initialize(<COMPONENT>ServiceManager $<COMPONENT_VAR>ServiceManager)
+    {
+        $this-><COMPONENT_VAR>ServiceManager = $<COMPONENT_VAR>ServiceManager;
+    }
+
+    /**
+     * @return ShopLanguageCollection
+     */
+    public function indexAction()
+    {
+        /** @var <MODELCLASS>Collection $<MODELCLASS_VAR> */
+        $<MODELCLASS_VAR>Collection = $this-><COMPONENT_VAR>ServiceManager
+            ->get<MODELCLASS>Service()
+            ->find(self::URI);
+
+        return $<MODELCLASS_VAR>Collection;
+    }
+
+    /**
+     * @param null|int $id
+     *
+     * @return null
+     */
+    public function newAction($id = null)
+    {
+        if (empty($id))
+        {
+            return $this-><COMPONENT_VAR>ServiceManager
+                ->get<MODELCLASS>CodeService()
+                ->getModel();
+        }
+
+        // This is here so we can copy an entity. It minimizes api pollution by actions
+        $<MODELCLASS_VAR> = $this-><COMPONENT_VAR>ServiceManager
+            ->get<MODELCLASS>Service()
+            ->findOneById($id);
+
+        $<MODELCLASS_VAR>->setId(null);
+
+        return $<MODELCLASS_VAR>;
+    }
+
+    /**
+     * @return Response
+     */
+    public function createAction()
+    {
+        /** @var <MODELCLASS> $<MODELCLASS_VAR> */
+        $<MODELCLASS_VAR> = $this-><COMPONENT_VAR>ServiceManager
+            ->get<MODELCLASS>Service()
+            ->create($this->getSafeParams());
+
+        return $this->respondWith($<MODELCLASS_VAR>); // respondWith() knows what to do if there are errors
+    }
+
+    /**
+     * @param $id
+     *
+     * @return ShopLanguage
+     */
+    public function showAction($id)
+    {
+        /** @var <MODELCLASS> $<MODELCLASS_VAR> */
+        $<MODELCLASS_VAR> = $this-><COMPONENT_VAR>ServiceManager
+            ->get<MODELCLASS>Service()
+            ->findOneById($id);
+
+        return $<MODELCLASS_VAR>;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @throws Exception
+     *
+     * @return Response
+     */
+    public function updateAction($id)
+    {
+        /** @var <MODELCLASS> $<MODELCLASS_VAR> */
+        $<MODELCLASS_VAR> = $this-><COMPONENT_VAR>ServiceManager
+            ->get<MODELCLASS>Service()
+            ->updateById($id, $this->getSafeParams());
+
+        return $this->respondWith($<MODELCLASS_VAR>); // respondWith() knows what to do if there are errors
+    }
+
+    /**
+     * @param $id
+     *
+     * @return  Response
+     */
+    public function deleteAction($id)
+    {
+        /** @var <MODELCLASS> $<MODELCLASS_VAR> */
+        $<MODELCLASS_VAR> = $this-><COMPONENT_VAR>ServiceManager->get<MODELCLASS>Service()->deleteById($id);
+
+        return $this->respondWith($<MODELCLASS_VAR>); // respondWith() knows what to do if there are errors
+    }
+
+    /**
+     *
+     * @throws Exception
+     *
+     * @return StrongParametersInterface
+     */
+    private function getSafeParams()
+    {
+        return $this->params->required('hallmark')
+            ->need(
+                [
+                    'name',
+                    'img_url',
+                    'link_url',
+                    'is_open_in_same_window',
+                ]
+            )
+            ->permit(
+                [
+                    'name',
+                    'img_url',
+                    'link_url',
+                    'is_open_in_same_window',
+                ]
+            );
+    }
+}

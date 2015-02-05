@@ -1,8 +1,11 @@
 <?php
 namespace SEOshop\BusinessLogic\<COMPONENT>\Service;
 
-use Psr\Log\LoggerInterface;
+use <MODELCLASS>;
+use <MODELCLASS>Collection;
 use Repository\Contract\<MODELCLASS>RepositoryInterface;
+use SEOshop\Backend\Routing\StrongParametersInterface;
+use Psr\Log\LoggerInterface;
 use SEOshop\BusinessLogic\Core\Concept\ServiceAbstract;
 
 /**
@@ -15,9 +18,9 @@ use SEOshop\BusinessLogic\Core\Concept\ServiceAbstract;
  * @method <MODELCLASS>Collection|<MODELCLASS>[] find()
  * @method <MODELCLASS> findOne()
  * @method <MODELCLASS> findOneById($id)
- * @method <MODELCLASS> create(StrongParameters $attributes)
- * @method <MODELCLASS> update(<MODELCLASS> $model, StrongParameters $attributes)
- * @method <MODELCLASS> updateById($id, StrongParameters $attributes)
+ * @method <MODELCLASS> create(StrongParametersInterface $attributes)
+ * @method <MODELCLASS> update(<MODELCLASS> $model, StrongParametersInterface $attributes)
+ * @method <MODELCLASS> updateById($id, StrongParametersInterface $attributes)
  * @method <MODELCLASS> delete(<MODELCLASS> $model)
  * @method <MODELCLASS> deleteById($id)
  *

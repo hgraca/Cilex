@@ -1,0 +1,22 @@
+<?php
+namespace Paginator;
+
+use <MODELCLASS>Query;
+use SEOshop\Backend\BigD\Runtime\Criteria;
+use SEOshop\Backend\Paginator\QueryPaginator;
+
+/**
+ * Class <MODELCLASS>Paginator
+ *
+ * @package <COMPONENT>
+ */
+class <MODELCLASS>Paginator extends QueryPaginator
+{
+    public function setup()
+    {
+        $this->setSearch(function (<MODELCLASS>Query $query, $string)
+        {
+            $query->filterBy<FILTER_PROPERTY>($string, Criteria::LIKE);
+        });
+    }
+}
