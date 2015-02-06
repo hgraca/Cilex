@@ -6,6 +6,8 @@ use Cilex\Service\Concept\ServiceAbstract;
 
 class ComponentCreatorService extends ServiceAbstract
 {
+    const TEMPLATE_PATH_SERVICE_MANAGER = "/ServiceManager.php.tmpl";
+    const TEMPLATE_PATH_EXCEPTION       = "/ComponentException.php.tmpl";
 
     public function create(
         $componentName,
@@ -29,7 +31,6 @@ class ComponentCreatorService extends ServiceAbstract
                 $this->logger->error("Could not create the component folder.");
                 exit;
             }
-
         }
 
         if (false === file_exists($componentExceptionsPath))
@@ -83,5 +84,15 @@ class ComponentCreatorService extends ServiceAbstract
             file_put_contents($serviceManagerFilePath, $template);
             exec("git add $serviceManagerFilePath");
         }
+    }
+
+    protected function getComponentExceptionsPath($componentName)
+    {
+        return $this->getComponentPath($componentName) . "/Exception";
+    }
+
+    protected function getComponentExceptionFilePath($componentName)
+    {
+        return $this->getComponentExceptionsPath($componentName) . "/{$componentName}Exception.php";
     }
 }

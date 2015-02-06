@@ -5,6 +5,7 @@ use Cilex\Service\Concept\ServiceAbstract;
 
 class ServiceCreatorService extends ServiceAbstract
 {
+    const TEMPLATE_PATH_SERVICE = "/Service.php.tmpl";
 
     /**
      * @param string          $componentName

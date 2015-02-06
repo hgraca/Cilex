@@ -6,6 +6,11 @@ use Cilex\Service\Concept\ServiceAbstract;
 
 class RepositoryCreatorService extends ServiceAbstract
 {
+    const TEMPLATE_PATH_REPOSITORY           = "/Repository.php.tmpl";
+    const TEMPLATE_PATH_REPOSITORY_INTERFACE = "/RepositoryInterface.php.tmpl";
+
+    const REPLACEMENT_STRING_MODEL_PARENT_USE_CLASSPATH = '<USEPARENT>';
+    const REPLACEMENT_STRING_MODEL_PARENT_CLASS_NAME    = '<PARENTCLASS>';
 
     /**
      * @param null   $componentName
@@ -72,8 +77,8 @@ class RepositoryCreatorService extends ServiceAbstract
     }
 
     /**
-     * @param string          $modelClassName
-     * @param bool            $overwrite
+     * @param string $modelClassName
+     * @param bool   $overwrite
      */
     public function createRepositoryInterface($modelClassName, $overwrite = false)
     {
