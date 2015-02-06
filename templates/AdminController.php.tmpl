@@ -3,9 +3,8 @@ use SEOshop\Backend\Http\Response;
 use SEOshop\Backend\Routing\StrongParametersInterface;
 use SEOshop\BusinessLogic\<COMPONENT>\<COMPONENT>ServiceManager;
 
-class <URI_CAMEL_CASE>sAdminController extends AdminController
+class <CONTROLLER_NAME>AdminController extends AdminController
 {
-    const MODEL = '<MODELCLASS>';
     const URI   = '<URI>';
 
     /**
@@ -104,6 +103,38 @@ class <URI_CAMEL_CASE>sAdminController extends AdminController
     }
 
     /**
+     * @return  Response
+     */
+    public function bulkUpdateAction()
+    {
+        $helper = BulkHelper::create(['delete']);
+
+        $error = $helper->getError();
+
+        if ($error)
+        {
+            return $this->respondWith(null, Response::UNPROCESSABLE_ENTITY, self::URI, $error);
+        }
+
+        switch ($helper->getOperation())
+        {
+            case 'delete':
+
+                $ids = $helper->getIds();
+
+                $<MODELCLASS_VAR>Collection = $this-><COMPONENT_VAR>ServiceManager
+                    ->get<MODELCLASS>Service()
+                    ->findWithIds($ids);
+
+                $helper->execute($<MODELCLASS_VAR>Collection);
+
+                return $this->respondWith(null, Response::OK, self::URI, $helper->getMessage());
+        }
+
+        return $this->respondWith(null, Response::UNPROCESSABLE_ENTITY, self::URI, 'Unknown operation.');
+    }
+
+    /**
      * @param $id
      *
      * @return  Response
@@ -124,21 +155,15 @@ class <URI_CAMEL_CASE>sAdminController extends AdminController
      */
     private function getSafeParams()
     {
-        return $this->params->required('hallmark')
+        return $this->params->required('<REQUIRED_ROOT_ELEMENT>')
             ->need(
                 [
-                    'name',
-                    'img_url',
-                    'link_url',
-                    'is_open_in_same_window',
+                    '<NEEDED_ELEMENT>',
                 ]
             )
             ->permit(
                 [
-                    'name',
-                    'img_url',
-                    'link_url',
-                    'is_open_in_same_window',
+                    '<PERMITTED_ELEMENT>',
                 ]
             );
     }

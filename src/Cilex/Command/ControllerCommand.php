@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Command to generate a new code unit
  */
-class ServiceCommand extends CommandAbstract
+class ControllerCommand extends CommandAbstract
 {
     /**
      * {@inheritDoc}
@@ -17,12 +17,19 @@ class ServiceCommand extends CommandAbstract
     protected function configure()
     {
         $this
-            ->setName('service')
+            ->setName('controller')
             ->setDescription(
-                'Generates a full or partial service, with repository, ...'
+                'Generates a controller for a model'
             )
             ->addOption('component', 'c', InputOption::VALUE_REQUIRED, 'If set, the component name.')
             ->addOption('model', 'm', InputOption::VALUE_REQUIRED, 'If set, the model name.')
+            ->addOption('uri', 'u', InputOption::VALUE_REQUIRED, 'If set, the uri for this controller.')
+            ->addOption(
+                'project',
+                'p',
+                InputOption::VALUE_REQUIRED,
+                'If set, the project for this controller (admin, manage, staff, ...).'
+            )
             ->addOption('overwrite', 'o', InputOption::VALUE_NONE, 'If set, existing files will be overwritten.');
     }
 
@@ -33,8 +40,10 @@ class ServiceCommand extends CommandAbstract
     {
         $componentName = $input->getOption('component');
         $modelName     = $input->getOption('model');
+        $uri           = $input->getOption('uri');
+        $project       = $input->getOption('project');
         $overwrite     = $input->getOption('overwrite');
 
-        $this->createService($input, $output, $componentName, $modelName, $overwrite);
+        $this->createController($input, $output, $componentName, $modelName, $uri, $project, $overwrite);
     }
 }

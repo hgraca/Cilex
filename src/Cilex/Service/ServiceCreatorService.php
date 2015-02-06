@@ -97,8 +97,8 @@ class ServiceCreatorService extends ServiceAbstract
         $template = substr_replace($template, $replace, $pos, strlen($find) + 1); // add inj
         $template = str_replace(',        ', ",\n        ", $template);// add line brks in constructor line
         $template = str_replace(
-            "<MODELCLASSVAR>Service = $<MODELCLASSVAR>Service;\n\n",
-            "<MODELCLASSVAR>Service = $<MODELCLASSVAR>Service;\n",
+            "<MODELCLASS_VAR>Service = $<MODELCLASS_VAR>Service;\n\n",
+            "<MODELCLASS_VAR>Service = $<MODELCLASS_VAR>Service;\n",
             $template
         );// remove extra line brks in constructor line
 

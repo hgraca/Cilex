@@ -41,7 +41,7 @@ class PaginatorCreatorService extends ServiceAbstract
             }
             else
             {
-                $this->logger->error("Could not create the component services folder.");
+                $this->logger->error("Could not create the component paginators folder.");
                 exit;
             }
         }
@@ -73,10 +73,10 @@ class PaginatorCreatorService extends ServiceAbstract
         return $rootPath . "/app/models/Paginator";
     }
 
-    protected function getPaginatorFilePath($modelClassName)
+    protected function getPaginatorFilePath($componentName, $modelClassName)
     {
         $rootPath = $this->getProjectRootPath();
 
-        return $rootPath . "/app/models/Paginator/{$modelClassName}Repository.php";
+        return $rootPath . "/app/models/Paginator/{$modelClassName}Paginator.php";
     }
 }

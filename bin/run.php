@@ -9,5 +9,9 @@ defined('PATH_ROOT') or define('PATH_ROOT', __DIR__ . '/..');
 defined('PATH_TEMPLATES') or define('PATH_TEMPLATES', PATH_ROOT . '/templates');
 
 $app = new \Cilex\Application('Cilex');
-$app->command(new \Cilex\Command\CodeGenCommand());
+$app->command(new \Cilex\Command\ComponentCommand());
+$app->command(new \Cilex\Command\ControllerCommand());
+$app->command(new \Cilex\Command\PaginatorCommand());
+$app->command(new \Cilex\Command\RepositoryCommand());
+$app->command(new \Cilex\Command\ServiceCommand());
 $app->run();

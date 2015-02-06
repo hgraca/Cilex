@@ -2,8 +2,6 @@
 namespace Cilex\Command;
 
 use Cilex\Command\Concept\CommandAbstract;
-use Cilex\Service\LoggerService;
-use Cilex\Service\RepositoryCreatorService;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,9 +17,9 @@ class RepositoryCommand extends CommandAbstract
     protected function configure()
     {
         $this
-            ->setName('component')
+            ->setName('repository')
             ->setDescription(
-                'Generates a full or partial component, with service, repository, controller, paginator, ...'
+                'Generates a repository with its interface ...'
             )
             ->addOption('component', 'c', InputOption::VALUE_REQUIRED, 'If set, the component name.')
             ->addOption('model', 'm', InputOption::VALUE_REQUIRED, 'If set, the model name.')

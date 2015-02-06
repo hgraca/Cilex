@@ -2,6 +2,7 @@
 namespace Cilex\Command\Concept;
 
 use Cilex\Service\ComponentCreatorService;
+use Cilex\Service\ControllerCreatorService;
 use Cilex\Service\LoggerService;
 use Cilex\Service\PaginatorCreatorService;
 use Cilex\Service\RepositoryCreatorService;
@@ -46,6 +47,65 @@ class CommandAbstract extends Command
         {
             $this->createService($input, $output, $componentName, null, $overwrite);
         }
+
+        // create controllers
+        /** @var QuestionHelper $questionHelper */
+        $questionHelper = $this->getHelper('question');
+        $question       = new ConfirmationQuestion('Add a controller? [(y)|n]', true);
+        while ($questionHelper->ask($input, $output, $question))
+        {
+            $this->createController($input, $output, $componentName, null, null, null, $overwrite);
+        }
+    }
+
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @param                 $componentName
+     * @param                 $modelName
+     * @param                 $uri
+     * @param                 $project
+     * @param                 $overwrite
+     *
+     * @throws \Exception
+     */
+    protected function createController(
+        InputInterface $input,
+        OutputInterface $output,
+        $componentName,
+        $modelName,
+        $uri,
+        $project,
+        $overwrite
+    ) {
+        if (empty($componentName))
+        {
+            $componentName = $this->askComponentName($input, $output);
+        }
+
+        if (empty($modelName))
+        {
+            $modelName = $this->askModelName($input, $output);
+        }
+
+        if (empty($uri))
+        {
+            $uri = $this->askUri($input, $output);
+        }
+
+        if (empty($project))
+        {
+            $project = $this->askProject($input, $output);
+        }
+
+        $paginatorCreator = new ControllerCreatorService(new LoggerService($output));
+        $paginatorCreator->create(
+            $componentName,
+            $modelName,
+            $uri,
+            $project,
+            $overwrite
+        );
     }
 
     /**
@@ -68,7 +128,7 @@ class CommandAbstract extends Command
             $componentName = $this->askComponentName($input, $output);
         }
 
-        if (empty($modelClassName))
+        if (empty($modelName))
         {
             $modelName = $this->askModelName($input, $output);
         }
@@ -113,7 +173,7 @@ class CommandAbstract extends Command
             $componentName = $this->askComponentName($input, $output);
         }
 
-        if (empty($modelClassName))
+        if (empty($modelName))
         {
             $modelName = $this->askModelName($input, $output);
         }
@@ -130,6 +190,15 @@ class CommandAbstract extends Command
             $bound,
             $overwrite
         );
+
+        // create the paginator
+        /** @var QuestionHelper $questionHelper */
+        $questionHelper = $this->getHelper('question');
+        $question       = new ConfirmationQuestion('Add a paginator? [(y)|n]', true);
+        if ($questionHelper->ask($input, $output, $question))
+        {
+            $this->createPaginator($input, $output, $componentName, $modelName, null, $overwrite);
+        }
     }
 
     /**
@@ -177,8 +246,6 @@ class CommandAbstract extends Command
 
     protected function askComponentName(InputInterface $input, OutputInterface $output)
     {
-        $componentName = $input->getOption('component');
-
         /** @var QuestionHelper $questionHelper */
         $questionHelper = $this->getHelper('question');
         $question       = new Question('Please enter the name of the component: ');
@@ -199,8 +266,6 @@ class CommandAbstract extends Command
 
     protected function askModelName(InputInterface $input, OutputInterface $output)
     {
-        $modelName = $input->getOption('model');
-
         /** @var QuestionHelper $questionHelper */
         $questionHelper = $this->getHelper('question');
         $question       = new Question('Please enter the name of the model: ');
@@ -221,8 +286,6 @@ class CommandAbstract extends Command
 
     protected function askFilterProperty(InputInterface $input, OutputInterface $output)
     {
-        $filterProperty = $input->getOption('filter');
-
         /** @var QuestionHelper $questionHelper */
         $questionHelper = $this->getHelper('question');
         $question       = new Question('Please enter the name of the model property used to filter: ');
@@ -251,5 +314,45 @@ class CommandAbstract extends Command
         $bound          = $questionHelper->ask($input, $output, $question);
 
         return $bound;
+    }
+
+    protected function askUri(InputInterface $input, OutputInterface $output)
+    {
+        /** @var QuestionHelper $questionHelper */
+        $questionHelper = $this->getHelper('question');
+        $question       = new Question('Please enter the URI for this controller: ');
+        $i              = 0;
+        while (empty($uri) && ($i < 3))
+        {
+            $uri = $questionHelper->ask($input, $output, $question);
+            $i++;
+        }
+
+        If (empty($uri))
+        {
+            throw new \Exception("Can not proceed without a URI for the controller.");
+        }
+
+        return $uri;
+    }
+
+    protected function askProject(InputInterface $input, OutputInterface $output)
+    {
+        /** @var QuestionHelper $questionHelper */
+        $questionHelper = $this->getHelper('question');
+        $question       = new Question('Please enter the project for this controller (admin, manage, staff, ...): ');
+        $i              = 0;
+        while (empty($project) && ($i < 3))
+        {
+            $project = $questionHelper->ask($input, $output, $question);
+            $i++;
+        }
+
+        If (empty($project))
+        {
+            throw new \Exception("Can not proceed without a project for the controller.");
+        }
+
+        return $project;
     }
 }
