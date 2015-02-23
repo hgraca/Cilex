@@ -1,5 +1,5 @@
 {
-  "alias": "backend.phar",
+  "alias": "codegen.phar",
   "chmod": "0755",
   "directories": ["src", "templates"],
   "finder": [
@@ -11,6 +11,6 @@
   ],
   "git-version": "1.0.0",
   "main": "bin/run.php",
-  "output": "backend.phar",
+  "output": "codegen.phar",
   "stub": true
 }
